@@ -46,6 +46,8 @@
     BMKLocationReGeocode* rgcData = location.rgcData;
     BOOL isInChina = [BMKLocationManager BMKLocationDataAvailableForCoordinate:location.location.coordinate withCoorType:BMKLocationCoordinateTypeBMK09LL];
     
+    NSLog(@"rgcData %@",rgcData);
+    
     if(rgcData.district==nil || rgcData.adCode == nil){
         //国外定位nil的返回空
         return @{
@@ -53,13 +55,13 @@
              @"longitude":@(location.location.coordinate.longitude),
              @"country":rgcData.country,
              @"countryCode":rgcData.countryCode,
-             @"province":rgcData.province,
-             @"city":rgcData.city,
-             @"cityCode":rgcData.cityCode,
+             @"province":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.province]],
+             @"city":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.city]],
+             @"cityCode":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.cityCode]],
              @"district":@(""),
-             @"street":rgcData.street,
-             @"streetNumber":rgcData.streetNumber,
-             @"locationDescribe":rgcData.locationDescribe,
+             @"street":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.street]],
+             @"streetNumber":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.streetNumber]],
+             @"locationDescribe":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.locationDescribe]],
              @"adCode":@(""),
              @"isInChina":@(isInChina),
              @"errorCode":@(161),
@@ -71,21 +73,30 @@
              @"longitude":@(location.location.coordinate.longitude),
              @"country":rgcData.country,
              @"countryCode":rgcData.countryCode,
-             @"province":rgcData.province,
-             @"city":rgcData.city,
-             @"cityCode":rgcData.cityCode,
-             @"district":rgcData.district,
-             @"street":rgcData.street,
-             @"streetNumber":rgcData.streetNumber,
-             @"locationDescribe":rgcData.locationDescribe,
-             @"adCode":rgcData.adCode,
+             @"province":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.province]],
+             @"city":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.city]],
+             @"cityCode":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.cityCode]],
+             @"district":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.district]],
+             @"street":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.street]],
+             @"streetNumber":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.streetNumber]],
+             @"locationDescribe":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.locationDescribe]],
+             @"adCode":[self getNullAndNil:[NSString stringWithFormat:@"%@",rgcData.adCode]],
              @"isInChina":@(isInChina),
              @"errorCode":@(161),
         };
     }
 }
 
+-(NSString *)getNullAndNil:(NSString *)tempStr{
+    if ( tempStr == nil || tempStr == NULL ||[tempStr isKindOfClass:[NSNull class]] || [[tempStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length]==0){
+        return @"";
+    }else{
+        return tempStr;
+    }
+}
+
 -(void)getCurrentLocation: (FlutterResult)result{
+
     self.completionBlock = ^(BMKLocation *location, BMKLocationNetworkState state, NSError *error)
     {
         if (error)
